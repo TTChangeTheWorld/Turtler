@@ -56,18 +56,21 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = 0);
-
+    QFont mainFont;
 public slots:
     void about();
     void newFile();
     void openFile(const QString &path = QString());
-
+    void options();
+    void saveFile();
+    void saveFileAs();
 private:
     void setupEditor();
     void setupFileMenu();
     void setupHelpMenu();
-
+    QString savePath;
     QTextEdit *editor;
+    //QTextBlock *saved;
     Highlighter *highlighter;
 };
 //! [0]

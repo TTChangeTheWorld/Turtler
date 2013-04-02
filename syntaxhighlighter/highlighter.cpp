@@ -48,6 +48,7 @@ Highlighter::Highlighter(QTextDocument *parent)
 
     keywordFormat.setForeground(Qt::darkBlue);
     keywordFormat.setFontWeight(QFont::Bold);
+    //keywordFormat.setPointSize(20);
     QStringList keywordPatterns;
     keywordPatterns << "\\bchar\\b" << "\\bclass\\b" << "\\bconst\\b"
                     << "\\bdouble\\b" << "\\benum\\b" << "\\bexplicit\\b"
@@ -58,7 +59,7 @@ Highlighter::Highlighter(QTextDocument *parent)
                     << "\\bslots\\b" << "\\bstatic\\b" << "\\bstruct\\b"
                     << "\\btemplate\\b" << "\\btypedef\\b" << "\\btypename\\b"
                     << "\\bunion\\b" << "\\bunsigned\\b" << "\\bvirtual\\b"
-                    << "\\bvoid\\b" << "\\bvolatile\\b" << "\\bwhile\\b";
+                    << "\\bvoid\\b" << "\\bvolatile\\b" << "\\bwhile\\b"<<"\\bfor\\b";
     foreach (const QString &pattern, keywordPatterns) {
         rule.pattern = QRegExp(pattern);
         rule.format = keywordFormat;
@@ -73,6 +74,7 @@ Highlighter::Highlighter(QTextDocument *parent)
 //! [2]
     classFormat.setFontWeight(QFont::Bold);
     classFormat.setForeground(Qt::darkMagenta);
+    classFormat.setFontPointSize(20);
     rule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
     rule.format = classFormat;
     highlightingRules.append(rule);
@@ -116,6 +118,7 @@ void Highlighter::highlightBlock(const QString &text)
         int index = expression.indexIn(text);
         while (index >= 0) {
             int length = expression.matchedLength();
+            //rule.format.setFont(window.mainFont);
             setFormat(index, length, rule.format);
             index = expression.indexIn(text, index + length);
         }

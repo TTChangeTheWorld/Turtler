@@ -39,7 +39,7 @@
 ****************************************************************************/
 
 #include <QtWidgets>
-
+#include<fstream>
 #include "mainwindow.h"
 
 //! [0]
@@ -61,12 +61,44 @@ void MainWindow::about()
                 tr("<p>The <b>Syntax Highlighter</b> example shows how " \
                    "to perform simple syntax highlighting by subclassing " \
                    "the QSyntaxHighlighter class and describing " \
-                   "highlighting rules using regular expressions.</p>"));
+                   "highlighting rules using regular expressions.</p>" \
+                   "I , Pavlov Ilya, has modified it..."));
 }
 
 void MainWindow::newFile()
 {
+    setWindowTitle("New document");
     editor->clear();
+}
+
+void MainWindow::saveFileAs(){
+  QString nsavePath = QFileDialog::getSaveFileName(this, tr("Save File"), "", "Turtler files (*.trt *.tur)");
+  if (!nsavePath.isEmpty()) savePath = nsavePath;
+  if (savePath.isNull()) return;
+  saveFile();
+}
+
+void MainWindow::saveFile()
+{
+
+    if (savePath.isNull()){
+        savePath = QFileDialog::getSaveFileName(this, tr("Save File"), "", "Turtler files (*.trt *.tur)");
+    }
+    if (!savePath.isEmpty()) {
+            setWindowTitle(savePath);
+            //QFile file(savePath);
+            std::ofstream fout(savePath.toStdString().c_str());
+            //file.write()
+            //editor->toPlainText().toStdString().c_str()
+            //std::freopen(savePath.toStdString().c_str(), "W", fout);
+            fout<<(editor->toPlainText().toStdString());
+    }
+}
+
+void MainWindow::options()
+{
+    //OptionsWindow.show();
+
 }
 
 void MainWindow::openFile(const QString &path)
@@ -74,9 +106,10 @@ void MainWindow::openFile(const QString &path)
     QString fileName = path;
 
     if (fileName.isNull())
-        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", "C++ Files (*.cpp *.h)");
+        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", "Turtler (*.trt *.tur)");
 
     if (!fileName.isEmpty()) {
+        setWindowTitle(fileName);
         QFile file(fileName);
         if (file.open(QFile::ReadOnly | QFile::Text))
             editor->setPlainText(file.readAll());
@@ -86,14 +119,14 @@ void MainWindow::openFile(const QString &path)
 //! [1]
 void MainWindow::setupEditor()
 {
-    QFont font;
-    font.setFamily("Courier");
-    font.setFixedPitch(true);
-    font.setPointSize(10);
+
+    mainFont.setFamily("Courier");
+    mainFont.setFixedPitch(true);
+    mainFont.setPointSize(20);
 
     editor = new QTextEdit;
-    editor->setFont(font);
-
+    editor->setFont(mainFont);
+    //editor->setGeometry(10, 10, 100, 100);
     highlighter = new Highlighter(editor->document());
 
     QFile file("mainwindow.h");
@@ -104,12 +137,18 @@ void MainWindow::setupEditor()
 
 void MainWindow::setupFileMenu()
 {
-    QMenu *fileMenu = new QMenu(tr("&File"), this);
+    QMenu *fileMenu = new QMenu(tr("File"), this);
+    QMenu *toolsMenu = new QMenu(tr("Tools"), this);
     menuBar()->addMenu(fileMenu);
+    menuBar()->addMenu(toolsMenu);
+    fileMenu->addAction(tr("New"), this, SLOT(newFile()), QKeySequence::New);
+    fileMenu->addAction(tr("Open..."), this, SLOT(openFile()), QKeySequence::Open);
+    fileMenu->addAction(tr("Exit"), qApp, SLOT(quit()), QKeySequence::Quit);
+    fileMenu->addAction(tr("Save"), this, SLOT(saveFile()), QKeySequence::Save);
+    fileMenu->addAction(tr("Save as..."), this, SLOT(saveFileAs()), QKeySequence::SaveAs);
 
-    fileMenu->addAction(tr("&New"), this, SLOT(newFile()), QKeySequence::New);
-    fileMenu->addAction(tr("&Open..."), this, SLOT(openFile()), QKeySequence::Open);
-    fileMenu->addAction(tr("E&xit"), qApp, SLOT(quit()), QKeySequence::Quit);
+    toolsMenu->addAction(tr("Options"), this, SLOT(options()));
+
 }
 
 void MainWindow::setupHelpMenu()
