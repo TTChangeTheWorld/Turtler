@@ -1,10 +1,13 @@
 QT += widgets
 
 HEADERS         = highlighter.h \
-                  mainwindow.h
+                  mainwindow.h \
+    optionsclass.h
 SOURCES         = highlighter.cpp \
                   mainwindow.cpp \
-                  main.cpp
+                  main.cpp \
+                  StrangeFunctions.cpp \
+    optionsclass.cpp
 
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/widgets/richtext/syntaxhighlighter

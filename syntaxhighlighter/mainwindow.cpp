@@ -41,6 +41,7 @@
 #include <QtWidgets>
 #include<fstream>
 #include "mainwindow.h"
+#include "StrangeFunctions.cpp"
 
 //! [0]
 MainWindow::MainWindow(QWidget *parent)
@@ -76,6 +77,10 @@ void MainWindow::saveFileAs(){
   if (!nsavePath.isEmpty()) savePath = nsavePath;
   if (savePath.isNull()) return;
   saveFile();
+}
+
+void MainWindow::keyPressed(){
+    positionText->setText(QString::fromStdString(inttostring(editor->textCursor().columnNumber()+1) + " " +  inttostring(editor->textCursor().blockNumber()+1)));
 }
 
 void MainWindow::saveFile()
@@ -119,6 +124,7 @@ void MainWindow::openFile(const QString &path)
 //! [1]
 void MainWindow::resizeEvent(QResizeEvent *){
     editor->setGeometry(2, this->menuBar()->height(), this->width() - 20, this->height()-40);
+    positionText->setGeometry(2, this->height()-20, this->width()-20, this->height() -5);
 }
 
 void MainWindow::setupEditor()
@@ -127,13 +133,16 @@ void MainWindow::setupEditor()
     mainFont.setFamily("Courier");
     mainFont.setFixedPitch(true);
     mainFont.setPointSize(20);
-
+    positionText = new QLabel;
     editor = new QTextEdit;
     editor->setParent(this);
     editor->setFont(mainFont);
     editor->setGeometry(2, this->menuBar()->height(), this->width() - 2, this->height());
+    connect(editor, SIGNAL(cursorPositionChanged()), this, SLOT(keyPressed()));
+    positionText->setParent(this);
+    positionText->setAlignment(Qt::AlignLeft|Qt::AlignTop);
+    positionText->show();
     highlighter = new Highlighter(editor->document());
-
     QFile file("mainwindow.h");
     if (file.open(QFile::ReadOnly | QFile::Text))
         editor->setPlainText(file.readAll());

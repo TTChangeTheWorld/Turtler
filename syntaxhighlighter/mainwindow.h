@@ -42,7 +42,7 @@
 #define MAINWINDOW_H
 
 #include "highlighter.h"
-
+#include <QLabel>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -58,6 +58,7 @@ public:
     MainWindow(QWidget *parent = 0);
     QFont mainFont;
 public slots:
+    void keyPressed();
     void about();
     void newFile();
     void openFile(const QString &path = QString());
@@ -71,6 +72,8 @@ private:
     void setupHelpMenu();
     QString savePath;
     QTextEdit *editor;
+    QLabel *positionText;
+    //QTextFrame
     //QTextBlock *saved;
     Highlighter *highlighter;
 };
