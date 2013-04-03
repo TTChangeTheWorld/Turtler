@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
     setupHelpMenu();
     setupEditor();
 
-    //setCentralWidget(editor);
+    setCentralWidget(editor);
     setWindowTitle(tr("Syntax Highlighter"));
 }
 //! [0]
@@ -117,10 +117,6 @@ void MainWindow::openFile(const QString &path)
 }
 
 //! [1]
-void MainWindow::resizeEvent(QResizeEvent *){
-    editor->setGeometry(2, this->menuBar()->height(), this->width() - 20, this->height()-40);
-}
-
 void MainWindow::setupEditor()
 {
 
@@ -129,9 +125,8 @@ void MainWindow::setupEditor()
     mainFont.setPointSize(20);
 
     editor = new QTextEdit;
-    editor->setParent(this);
     editor->setFont(mainFont);
-    editor->setGeometry(2, this->menuBar()->height(), this->width() - 2, this->height());
+    //editor->setGeometry(10, 10, 100, 100);
     highlighter = new Highlighter(editor->document());
 
     QFile file("mainwindow.h");

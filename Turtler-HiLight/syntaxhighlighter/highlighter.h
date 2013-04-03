@@ -38,42 +38,46 @@
 **
 ****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef HIGHLIGHTER_H
+#define HIGHLIGHTER_H
 
-#include "highlighter.h"
-
-#include <QMainWindow>
+#include <QSyntaxHighlighter>
+#include <QTextCharFormat>
 
 QT_BEGIN_NAMESPACE
-class QTextEdit;
+class QTextDocument;
 QT_END_NAMESPACE
 
 //! [0]
-class MainWindow : public QMainWindow
+class Highlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = 0);
-    QFont mainFont;
-public slots:
-    void about();
-    void newFile();
-    void openFile(const QString &path = QString());
-    void options();
-    void saveFile();
-    void saveFileAs();
+    Highlighter(QTextDocument *parent = 0);
+
+protected:
+    void highlightBlock(const QString &text);
+
 private:
-    void resizeEvent(QResizeEvent *);
-    void setupEditor();
-    void setupFileMenu();
-    void setupHelpMenu();
-    QString savePath;
-    QTextEdit *editor;
-    //QTextBlock *saved;
-    Highlighter *highlighter;
+    struct HighlightingRule
+    {
+        QRegExp pattern;
+        QTextCharFormat format;
+    };
+    QVector<HighlightingRule> highlightingRules;
+
+    QRegExp commentStartExpression;
+    QRegExp commentEndExpression;
+
+    QTextCharFormat keywordFormat;
+    QTextCharFormat classFormat;
+    QTextCharFormat singleLineCommentFormat;
+    QTextCharFormat multiLineCommentFormat;
+    QTextCharFormat quotationFormat;
+    QTextCharFormat functionFormat;
+    QTextCharFormat numberFormat;
 };
 //! [0]
 
-#endif // MAINWINDOW_H
+#endif // HIGHLIGHTER_H

@@ -46,11 +46,11 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     MainWindow window;
-    QWidget anotherWindow;
+    //QWidget anotherWindow;
     window.resize(640, 512);
-    anotherWindow.resize(700,600);
-    anotherWindow.show();
-    window.setParent(&anotherWindow);
+    //anotherWindow.resize(700,600);
+    //anotherWindow.show();
+    //window.setParent(&anotherWindow);
     window.show();
     return app.exec();
 }

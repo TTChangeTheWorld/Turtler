@@ -65,7 +65,6 @@ public slots:
     void saveFile();
     void saveFileAs();
 private:
-    void resizeEvent(QResizeEvent *);
     void setupEditor();
     void setupFileMenu();
     void setupHelpMenu();

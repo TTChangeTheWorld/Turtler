@@ -38,42 +38,19 @@
 **
 ****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "mainwindow.h"
 
-#include "highlighter.h"
+#include <QApplication>
 
-#include <QMainWindow>
-
-QT_BEGIN_NAMESPACE
-class QTextEdit;
-QT_END_NAMESPACE
-
-//! [0]
-class MainWindow : public QMainWindow
+int main(int argc, char *argv[])
 {
-    Q_OBJECT
-
-public:
-    MainWindow(QWidget *parent = 0);
-    QFont mainFont;
-public slots:
-    void about();
-    void newFile();
-    void openFile(const QString &path = QString());
-    void options();
-    void saveFile();
-    void saveFileAs();
-private:
-    void resizeEvent(QResizeEvent *);
-    void setupEditor();
-    void setupFileMenu();
-    void setupHelpMenu();
-    QString savePath;
-    QTextEdit *editor;
-    //QTextBlock *saved;
-    Highlighter *highlighter;
-};
-//! [0]
-
-#endif // MAINWINDOW_H
+    QApplication app(argc, argv);
+    MainWindow window;
+    QWidget anotherWindow;
+    window.resize(640, 512);
+    anotherWindow.resize(700,600);
+    anotherWindow.show();
+    window.setParent(&anotherWindow);
+    window.show();
+    return app.exec();
+}
