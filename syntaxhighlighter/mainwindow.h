@@ -44,7 +44,6 @@
 #include "highlighter.h"
 #include <QLabel>
 #include <QMainWindow>
-
 QT_BEGIN_NAMESPACE
 class QTextEdit;
 QT_END_NAMESPACE
@@ -65,6 +64,8 @@ public slots:
     void options();
     void saveFile();
     void saveFileAs();
+    void textChanged();
+    void changeFont();
 private:
     void resizeEvent(QResizeEvent *);
     void setupEditor();
@@ -73,9 +74,14 @@ private:
     QString savePath;
     QTextEdit *editor;
     QLabel *positionText;
+    QStringList SplitedText;
+    QRegExp validFileName;
+    bool aiEnabled;
     //QTextFrame
     //QTextBlock *saved;
     Highlighter *highlighter;
+    int PSize;
+    std::string isTextModified;
 };
 //! [0]
 

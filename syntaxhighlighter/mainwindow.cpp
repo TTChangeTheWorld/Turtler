@@ -80,8 +80,10 @@ void MainWindow::saveFileAs(){
 }
 
 void MainWindow::keyPressed(){
-    positionText->setText(QString::fromStdString(inttostring(editor->textCursor().columnNumber()+1) + " " +  inttostring(editor->textCursor().blockNumber()+1)));
+    positionText->setText(QString::fromStdString(inttostring(editor->textCursor().columnNumber()+1) + " : " +  inttostring(editor->textCursor().blockNumber()+1) + "  " + isTextModified));
 }
+
+
 
 void MainWindow::saveFile()
 {
@@ -90,6 +92,9 @@ void MainWindow::saveFile()
         savePath = QFileDialog::getSaveFileName(this, tr("Save File"), "", "Turtler files (*.trt *.tur)");
     }
     if (!savePath.isEmpty()) {
+            isTextModified = "";
+            qDebug((inttostring(validFileName.lastIndexIn(savePath))+" "+savePath.toStdString()).c_str());
+            if (validFileName.lastIndexIn(savePath)<0) savePath+=".trt";
             setWindowTitle(savePath);
             //QFile file(savePath);
             std::ofstream fout(savePath.toStdString().c_str());
@@ -97,6 +102,8 @@ void MainWindow::saveFile()
             //editor->toPlainText().toStdString().c_str()
             //std::freopen(savePath.toStdString().c_str(), "W", fout);
             fout<<(editor->toPlainText().toStdString());
+            positionText->setText(QString::fromStdString(inttostring(editor->textCursor().columnNumber()+1) + " : " +  inttostring(editor->textCursor().blockNumber()+1) + "  " + isTextModified));
+
     }
 }
 
@@ -106,13 +113,42 @@ void MainWindow::options()
 
 }
 
+void MainWindow::textChanged()
+{
+    //Text for showing if text is modified
+    if (isTextModified!="Modified"){
+        isTextModified = "Modified";
+        keyPressed();
+    }
+    //Add spaces in new string now ^^
+    if (aiEnabled){
+        if (editor->textCursor().blockNumber()<=0) return;
+        SplitedText = editor->toPlainText().split("\n");
+        if (SplitedText.size()!=PSize){
+           PSize = SplitedText.size();
+         if (true){
+             //qDebug("Ok");
+             int cur = 0;
+             while ((cur<SplitedText[editor->textCursor().blockNumber() - 1].length())&&(SplitedText[editor->textCursor().blockNumber() - 1][cur]==' ')) {
+                 cur++;
+                 editor->textCursor().insertText(" ");
+                 editor->textCursor().movePosition(QTextCursor::Right);
+                 //qDebug(inttostring(cur).c_str());
+             }
+         }
+        }
+        PSize = SplitedText.size();
+    }
+
+
+}
+
 void MainWindow::openFile(const QString &path)
 {
     QString fileName = path;
 
     if (fileName.isNull())
-        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", "Turtler (*.trt *.tur)");
-
+        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", "Turtler files (*.trt *.tur) \n All files (*)");
     if (!fileName.isEmpty()) {
         setWindowTitle(fileName);
         QFile file(fileName);
@@ -129,16 +165,19 @@ void MainWindow::resizeEvent(QResizeEvent *){
 
 void MainWindow::setupEditor()
 {
-
+    aiEnabled = true;
     mainFont.setFamily("Courier");
     mainFont.setFixedPitch(true);
     mainFont.setPointSize(20);
+    validFileName.setPattern("[a-zA-Z/а-яА-Я]+\\.[a-zA-Z/а-яА-Я]+");
     positionText = new QLabel;
     editor = new QTextEdit;
     editor->setParent(this);
     editor->setFont(mainFont);
     editor->setGeometry(2, this->menuBar()->height(), this->width() - 2, this->height());
+    //editor->setAutoFormatting(QTextEdit::AutoAll);
     connect(editor, SIGNAL(cursorPositionChanged()), this, SLOT(keyPressed()));
+    connect(editor, SIGNAL(textChanged()), this, SLOT(textChanged()));
     positionText->setParent(this);
     positionText->setAlignment(Qt::AlignLeft|Qt::AlignTop);
     positionText->show();
@@ -162,7 +201,12 @@ void MainWindow::setupFileMenu()
     fileMenu->addAction(tr("Save as..."), this, SLOT(saveFileAs()), QKeySequence::SaveAs);
 
     toolsMenu->addAction(tr("Options"), this, SLOT(options()));
+    toolsMenu->addAction(tr("Font config"), this, SLOT(changeFont()));
+}
 
+void MainWindow::changeFont(){
+    bool ok;
+    editor->setFont(QFontDialog::getFont(&ok, this));
 }
 
 void MainWindow::setupHelpMenu()
