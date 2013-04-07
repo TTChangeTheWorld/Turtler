@@ -44,6 +44,7 @@
 #include "highlighter.h"
 #include <QLabel>
 #include <QMainWindow>
+#include <executewindow.h>
 QT_BEGIN_NAMESPACE
 class QTextEdit;
 QT_END_NAMESPACE
@@ -56,6 +57,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = 0);
     QFont mainFont;
+    ExecuteWindow *ExWindow;
 public slots:
     void keyPressed();
     void about();

@@ -47,27 +47,30 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    ExWindow = new ExecuteWindow();
     setupFileMenu();
     setupHelpMenu();
     setupEditor();
 
     //setCentralWidget(editor);
-    setWindowTitle(tr("Syntax Highlighter"));
+    setWindowTitle(tr("Turtler"));
+    this->ExWindow->mainLog->pushText("Everything is ready.");
 }
 //! [0]
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, tr("About Syntax Highlighter"),
-                tr("<p>The <b>Syntax Highlighter</b> example shows how " \
-                   "to perform simple syntax highlighting by subclassing " \
-                   "the QSyntaxHighlighter class and describing " \
-                   "highlighting rules using regular expressions.</p>" \
-                   "I , Pavlov Ilya, has modified it..."));
+    this->ExWindow->mainLog->pushText(tr("Window about opened."));
+    QMessageBox::about(this, tr("About Turtler"),
+                tr("<p>The <b>Turtler</b> is a project"\
+                   "... but i wouldn't write about it..." \
+                   "<h1> I am too lazy </h1>"
+                   ));
 }
 
 void MainWindow::newFile()
 {
+    this->ExWindow->mainLog->pushText(tr("New file created."));
     setWindowTitle("New document");
     editor->clear();
 }
@@ -103,7 +106,7 @@ void MainWindow::saveFile()
             //std::freopen(savePath.toStdString().c_str(), "W", fout);
             fout<<(editor->toPlainText().toStdString());
             positionText->setText(QString::fromStdString(inttostring(editor->textCursor().columnNumber()+1) + " : " +  inttostring(editor->textCursor().blockNumber()+1) + "  " + isTextModified));
-
+            this->ExWindow->mainLog->pushText("File saved as " + savePath);
     }
 }
 
@@ -152,8 +155,10 @@ void MainWindow::openFile(const QString &path)
     if (!fileName.isEmpty()) {
         setWindowTitle(fileName);
         QFile file(fileName);
-        if (file.open(QFile::ReadOnly | QFile::Text))
+        if (file.open(QFile::ReadOnly | QFile::Text)){
             editor->setPlainText(file.readAll());
+            this->ExWindow->mainLog->pushText("Opened file: " + fileName );
+        }
     }
 }
 
@@ -165,6 +170,7 @@ void MainWindow::resizeEvent(QResizeEvent *){
 
 void MainWindow::setupEditor()
 {
+
     aiEnabled = true;
     mainFont.setFamily("Courier");
     mainFont.setFixedPitch(true);

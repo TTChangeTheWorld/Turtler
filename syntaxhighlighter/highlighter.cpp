@@ -48,7 +48,6 @@ Highlighter::Highlighter(QTextDocument *parent)
 
     keywordFormat.setForeground(Qt::darkBlue);
     keywordFormat.setFontWeight(QFont::Bold);
-    //keywordFormat.setPointSize(20);
     QStringList keywordPatterns;
     keywordPatterns << "\\bvar\\b" << "\\bfunction\\b" << "\\bleft\\b"
                     << "\\bright\\b" << "\\bup\\b" << "\\bdown\\b"
