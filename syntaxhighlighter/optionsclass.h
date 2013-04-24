@@ -1,9 +1,10 @@
 #ifndef OPTIONSCLASS_H
 #define OPTIONSCLASS_H
-#include<QFont>
-#include<QTextCharFormat>
+#include <QFont>
+
 class OptionsClass
 {
+private:
 public:
     OptionsClass();
     QFont *mainFont;

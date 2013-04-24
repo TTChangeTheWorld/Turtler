@@ -1,5 +1,4 @@
-#include<string>
-#include<sstream>
+#include <sstream>
 std::string inttostring(int a){
   std::stringstream b;
   b<<a;

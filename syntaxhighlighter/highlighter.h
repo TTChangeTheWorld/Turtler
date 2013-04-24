@@ -42,8 +42,7 @@
 #define HIGHLIGHTER_H
 
 #include <QSyntaxHighlighter>
-#include <QTextCharFormat>
-
+#include <QRegExp>
 QT_BEGIN_NAMESPACE
 class QTextDocument;
 QT_END_NAMESPACE

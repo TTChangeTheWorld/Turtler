@@ -1,6 +1,7 @@
 #ifndef EXPRESSIONSOLVER_H
 #define EXPRESSIONSOLVER_H
 #include <QString>
+
 class ExpressionSolver
 {
 public:

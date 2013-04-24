@@ -40,17 +40,17 @@
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include <QFont>
+#include "executewindow.h"
 #include "highlighter.h"
+#include "StrangeFunctions.cpp"
 #include <QLabel>
-#include <QMainWindow>
-#include <executewindow.h>
 QT_BEGIN_NAMESPACE
-class QTextEdit;
+
 QT_END_NAMESPACE
 
 //! [0]
-class MainWindow : public QMainWindow
+class MainWindow:public QMainWindow
 {
     Q_OBJECT
 

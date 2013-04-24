@@ -38,10 +38,7 @@
 **
 ****************************************************************************/
 
-#include <QtWidgets>
-#include<fstream>
-#include "mainwindow.h"
-#include "StrangeFunctions.cpp"
+#include <mainwindow.h>
 
 //! [0]
 MainWindow::MainWindow(QWidget *parent)
@@ -54,13 +51,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     //setCentralWidget(editor);
     setWindowTitle(tr("Turtler"));
-    this->ExWindow->mainLog->pushText("Everything is ready.");
+    this->ExWindow->mainLog->pushText("Everything is ready.","orange", "", true);
 }
 //! [0]
 
 void MainWindow::about()
 {
-    this->ExWindow->mainLog->pushText(tr("Window about opened."));
+    this->ExWindow->mainLog->pushText(tr("Window about opened."), "black", "<i>", true);
     QMessageBox::about(this, tr("About Turtler"),
                 tr("<p>The <b>Turtler</b> is a project"\
                    "... but i wouldn't write about it..." \
@@ -70,7 +67,7 @@ void MainWindow::about()
 
 void MainWindow::newFile()
 {
-    this->ExWindow->mainLog->pushText(tr("New file created."));
+    this->ExWindow->mainLog->pushText(tr("New file created."), "red", "");
     setWindowTitle("New document");
     editor->clear();
 }
@@ -106,7 +103,7 @@ void MainWindow::saveFile()
             //std::freopen(savePath.toStdString().c_str(), "W", fout);
             fout<<(editor->toPlainText().toStdString());
             positionText->setText(QString::fromStdString(inttostring(editor->textCursor().columnNumber()+1) + " : " +  inttostring(editor->textCursor().blockNumber()+1) + "  " + isTextModified));
-            this->ExWindow->mainLog->pushText("File saved as " + savePath);
+            this->ExWindow->mainLog->pushText("File saved as " + savePath, "red", "");
     }
 }
 
@@ -157,7 +154,7 @@ void MainWindow::openFile(const QString &path)
         QFile file(fileName);
         if (file.open(QFile::ReadOnly | QFile::Text)){
             editor->setPlainText(file.readAll());
-            this->ExWindow->mainLog->pushText("Opened file: " + fileName );
+            this->ExWindow->mainLog->pushText("Opened file: " + fileName , "black", "<b>");
         }
     }
 }
@@ -178,6 +175,7 @@ void MainWindow::setupEditor()
     validFileName.setPattern("[a-zA-Z/а-яА-Я]+\\.[a-zA-Z/а-яА-Я]+");
     positionText = new QLabel;
     editor = new QTextEdit;
+    editor->setAcceptRichText(false);
     editor->setParent(this);
     editor->setFont(mainFont);
     editor->setGeometry(2, this->menuBar()->height(), this->width() - 2, this->height());
