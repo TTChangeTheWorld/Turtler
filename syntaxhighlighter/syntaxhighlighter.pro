@@ -1,10 +1,24 @@
 QT += widgets
 
 HEADERS         = highlighter.h \
-                  mainwindow.h
+                  mainwindow.h \
+    optionsclass.h \
+    expressionsolver.h \
+    application_output.h \
+    executewindow.h \
+    turtle.h \
+    errorclass.h \
+    GlobalVars.h
 SOURCES         = highlighter.cpp \
                   mainwindow.cpp \
-                  main.cpp
+                  main.cpp \
+                  StrangeFunctions.cpp \
+    optionsclass.cpp \
+    expressionsolver.cpp \
+    application_output.cpp \
+    executewindow.cpp \
+    turtle.cpp \
+    errorclass.cpp
 
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/widgets/richtext/syntaxhighlighter

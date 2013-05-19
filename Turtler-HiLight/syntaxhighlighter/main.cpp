@@ -38,59 +38,19 @@
 **
 ****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-#include <QFont>
-#include "executewindow.h"
-#include "highlighter.h"
-#include "StrangeFunctions.cpp"
-#include <QLabel>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <fstream>
-#include <QMenuBar>
+#include "mainwindow.h"
+
 #include <QApplication>
-#include <QFontDialog>
-QT_BEGIN_NAMESPACE
 
-QT_END_NAMESPACE
-
-//! [0]
-class MainWindow:public QMainWindow
+int main(int argc, char *argv[])
 {
-    Q_OBJECT
-
-public:
-    MainWindow(QWidget *parent = 0);
-    QFont mainFont;
-    ExecuteWindow *ExWindow;
-public slots:
-    void keyPressed();
-    void about();
-    void newFile();
-    void openFile(const QString &path = QString());
-    void options();
-    void saveFile();
-    void saveFileAs();
-    void textChanged();
-    void changeFont();
-private:
-    void resizeEvent(QResizeEvent *);
-    void setupEditor();
-    void setupFileMenu();
-    void setupHelpMenu();
-    QString savePath;
-    QTextEdit *editor;
-    QLabel *positionText;
-    QStringList SplitedText;
-    QRegExp validFileName;
-    bool aiEnabled;
-    //QTextFrame
-    //QTextBlock *saved;
-    Highlighter *highlighter;
-    int PSize;
-    std::string isTextModified;
-};
-//! [0]
-
-#endif // MAINWINDOW_H
+    QApplication app(argc, argv);
+    MainWindow window;
+    QWidget anotherWindow;
+    window.resize(640, 512);
+    anotherWindow.resize(700,600);
+    anotherWindow.show();
+    window.setParent(&anotherWindow);
+    window.show();
+    return app.exec();
+}

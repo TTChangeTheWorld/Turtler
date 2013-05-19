@@ -38,59 +38,46 @@
 **
 ****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-#include <QFont>
-#include "executewindow.h"
-#include "highlighter.h"
-#include "StrangeFunctions.cpp"
-#include <QLabel>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <fstream>
-#include <QMenuBar>
-#include <QApplication>
-#include <QFontDialog>
-QT_BEGIN_NAMESPACE
+#ifndef HIGHLIGHTER_H
+#define HIGHLIGHTER_H
 
+#include <QSyntaxHighlighter>
+#include <QTextCharFormat>
+
+QT_BEGIN_NAMESPACE
+class QTextDocument;
 QT_END_NAMESPACE
 
 //! [0]
-class MainWindow:public QMainWindow
+class Highlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = 0);
-    QFont mainFont;
-    ExecuteWindow *ExWindow;
-public slots:
-    void keyPressed();
-    void about();
-    void newFile();
-    void openFile(const QString &path = QString());
-    void options();
-    void saveFile();
-    void saveFileAs();
-    void textChanged();
-    void changeFont();
+    Highlighter(QTextDocument *parent = 0);
+
+protected:
+    void highlightBlock(const QString &text);
+
 private:
-    void resizeEvent(QResizeEvent *);
-    void setupEditor();
-    void setupFileMenu();
-    void setupHelpMenu();
-    QString savePath;
-    QTextEdit *editor;
-    QLabel *positionText;
-    QStringList SplitedText;
-    QRegExp validFileName;
-    bool aiEnabled;
-    //QTextFrame
-    //QTextBlock *saved;
-    Highlighter *highlighter;
-    int PSize;
-    std::string isTextModified;
+    struct HighlightingRule
+    {
+        QRegExp pattern;
+        QTextCharFormat format;
+    };
+    QVector<HighlightingRule> highlightingRules;
+
+    QRegExp commentStartExpression;
+    QRegExp commentEndExpression;
+
+    QTextCharFormat keywordFormat;
+    QTextCharFormat classFormat;
+    QTextCharFormat singleLineCommentFormat;
+    QTextCharFormat multiLineCommentFormat;
+    QTextCharFormat quotationFormat;
+    QTextCharFormat functionFormat;
+    QTextCharFormat numberFormat;
 };
 //! [0]
 
-#endif // MAINWINDOW_H
+#endif // HIGHLIGHTER_H
